@@ -15,7 +15,7 @@ COPY . .
 RUN cargo build --release
 
 # Etapa 2: runtime
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 WORKDIR /app
 COPY --from=builder /app/target/release/rust-api .
 
