@@ -1,5 +1,6 @@
 # Build stage
 FROM rust:1.74 as builder
+RUN rustc --version && cargo --version
 WORKDIR /app
 
 # Cache dependencies
