@@ -1,16 +1,19 @@
-# Build stage
+# Etapa 1: builder
 FROM rust:1.75 as builder
 
 WORKDIR /app
+
+# 👇 Copiamos solo lo necesario para compilar dependencias primero
+COPY Cargo.toml Cargo.lock ./
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release
+RUN rm -r src
+
+# 👇 Ahora copiamos el código real
 COPY . .
-
-# Limpieza explícita por si el archivo persiste
-RUN rm -f Cargo.lock
-
-# Esto generará automáticamente el Cargo.lock correcto
 RUN cargo build --release
 
-# Runtime stage
+# Etapa 2: runtime
 FROM debian:bullseye-slim
 WORKDIR /app
 COPY --from=builder /app/target/release/rust-api .

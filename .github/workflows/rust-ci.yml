@@ -36,19 +36,13 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and push Docker image
-      run: |
-        docker build --no-cache -t $IMAGE_NAME:$IMAGE_TAG .
-        docker push $IMAGE_NAME:$IMAGE_TAG
-
-    - name: Set up Kubeconfig
-      uses: azure/setup-kubectl@v3
+      uses: docker/build-push-action@v5
       with:
-        version: 'v1.27.0'
-
-    - name: Configure Kubeconfig
-      run: |
-        mkdir -p ~/.kube
-        echo "${{ secrets.KUBECONFIG_CONTENT }}" > ~/.kube/config
+        context: .
+        push: true
+        tags: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Deploy to Kubernetes
       run: |
