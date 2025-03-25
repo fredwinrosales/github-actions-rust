@@ -4,7 +4,8 @@ FROM rust:1.75 as builder
 WORKDIR /app
 
 # 👇 Copiamos solo lo necesario para compilar dependencias primero
-COPY Cargo.toml Cargo.lock ./
+# Ahora:
+COPY Cargo.toml ./
 RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo build --release
 RUN rm -r src
