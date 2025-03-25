@@ -4,6 +4,9 @@ FROM rust:1.74 as builder
 WORKDIR /app
 COPY . .
 
+# Limpieza explícita por si el archivo persiste
+RUN rm -f Cargo.lock
+
 # Esto generará automáticamente el Cargo.lock correcto
 RUN cargo build --release
 
